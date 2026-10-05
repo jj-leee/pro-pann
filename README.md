@@ -8,6 +8,15 @@ calibrated on 2022–2023, and tested on the held-out 2024 cohort (n = 2,829).
 
 **Research and decision-support use only. This tool is not a medical device.**
 
+## Acknowledgment
+
+PRO-PANN is a fork of **[ML-Tongue-Pred](https://github.com/AnthonyMatarr/ML-Tongue-Pred)**
+(PRO-TONGUE) by Anthony Matar. The Streamlit calculator, the preprocessing
+pipeline, and the modeling framework (model training, calibration, lift-based
+risk tiers and SHAP explanations) are adapted from that repository and applied
+to panniculectomy. ML-Tongue-Pred is distributed under the MIT License. Its
+copyright and permission notice are kept in [`licenses/`](licenses/).
+
 Live app: https://pro-pann.streamlit.app (once deployed; see `DEPLOY_STEPS.md`).
 
 ## Run locally
