@@ -7,7 +7,7 @@ URL = "https://pro-pann.streamlit.app"
 
 
 # A substring is used to stay robust to whitespace/casing quirks in the DOM.
-RENDER_MARKER = "Panniculectomy 30-day Risk Calculator"
+RENDER_MARKER = "Postoperative Risk Outcomes after Panniculectomy"
 
 
 def main():

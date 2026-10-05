@@ -44,7 +44,7 @@ This repository is a GitHub fork of [ML-Tongue-Pred](https://github.com/AnthonyM
 - **Deployment artifacts:** aggregate test-cohort summaries replace per-patient predictions (see [Data Privacy](#data-privacy)).
 
 ## Associated Risk Calculator
-A web application deploys **LightGBM** models (wound complications, unplanned reoperation) and **XGBoost** models (any complication, unplanned readmission, bleeding requiring transfusion) for the five primary outcomes. It stratifies an input patient into one of **Very Low, Low, Moderate, or High** risk bins based on calibrated probability output. The interface can be found [here](https://pro-pann.streamlit.app/).
+**PRO-PANN** (**P**ostoperative **R**isk **O**utcomes after **Pann**iculectomy) is a web application that deploys **LightGBM** models (wound complications, unplanned reoperation) and **XGBoost** models (any complication, unplanned readmission, bleeding requiring transfusion) for the five primary outcomes. It stratifies an input patient into one of **Very Low, Low, Moderate, or High** risk bins based on calibrated probability output. The interface can be found [here](https://pro-pann.streamlit.app/).
 
 Once all [Installation Steps](#installation) are completed, you can also run the app locally with `.venv/bin/streamlit run app/base_app.py`.
 

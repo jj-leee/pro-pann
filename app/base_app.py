@@ -20,7 +20,7 @@ from config import OUTCOMES
 
 def main():
     st.set_page_config(page_title="PRO-PANN", page_icon="🏥", layout="wide")
-    st.title("PRO-PANN — Panniculectomy 30-day Risk Calculator")
+    st.title("PRO-PANN: Postoperative Risk Outcomes after Panniculectomy")
     st.markdown(
         "Interpretable ML risk estimates for 30-day outcomes after panniculectomy "
         "(ACS-NSQIP 2014–2024). Models are calibrated and validated on a held-out "
