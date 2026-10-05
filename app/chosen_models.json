@@ -1,15 +1,7 @@
 {
   "wound": "lgbm",
-  "supinfec": "lgbm",
-  "deep_ssi": "lr",
-  "organ_ssi": "lgbm",
-  "dehis": "lgbm",
+  "any": "xgb",
   "reop": "lgbm",
   "readmit": "xgb",
-  "vte": "xgb",
-  "serious": "xgb",
-  "any": "xgb",
-  "bleed": "xgb",
-  "sepsis": "xgb",
-  "nonhome": "lgbm"
+  "bleed": "xgb"
 }

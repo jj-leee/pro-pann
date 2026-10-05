@@ -13,7 +13,7 @@ This project implements Logistic Regression, LightGBM, XGBoost, Neural Network, 
 - Unplanned readmission
 - Bleeding requiring transfusion
 
-**Secondary outcomes:**
+**Secondary outcomes** (modeled and reported in the manuscript, but not deployed):
 - Serious complications
 - Superficial, deep, and organ/space surgical site infection
 - Wound dehiscence
@@ -40,16 +40,16 @@ This repository is a GitHub fork of [ML-Tongue-Pred](https://github.com/AnthonyM
 **Adapted for panniculectomy:**
 - **Cohort:** cases with CPT 15830 in any CPT field of ACS-NSQIP 2014-2024, split strictly by year.
 - **Predictors:** 37 preoperative variables, including nine concurrent-procedure flags (e.g., ventral hernia repair, abdominoplasty, liposuction). Dyspnea and weight loss were excluded because ACS-NSQIP has not recorded them since 2021.
-- **Outcomes:** 14 outcomes are modeled and 13 are deployed. They include bleeding requiring transfusion, which the ACS-NSQIP Surgical Risk Calculator does not estimate.
+- **Outcomes:** 14 outcomes are modeled, and the 5 primary outcomes are deployed. They include bleeding requiring transfusion, which the ACS-NSQIP Surgical Risk Calculator does not estimate.
 - **Deployment artifacts:** aggregate test-cohort summaries replace per-patient predictions (see [Data Privacy](#data-privacy)).
 
 ## Associated Risk Calculator
-A web application deploys **LightGBM** models (wound complications, superficial SSI, organ/space SSI, dehiscence, unplanned reoperation, non-home discharge), **XGBoost** models (any complication, serious complications, unplanned readmission, bleeding, VTE, sepsis), and a **logistic regression** model (deep SSI). It stratifies an input patient into one of **Very Low, Low, Moderate, or High** risk bins based on calibrated probability output. The interface can be found [here](https://pro-pann.streamlit.app/).
+A web application deploys **LightGBM** models (wound complications, unplanned reoperation) and **XGBoost** models (any complication, unplanned readmission, bleeding requiring transfusion) for the five primary outcomes. It stratifies an input patient into one of **Very Low, Low, Moderate, or High** risk bins based on calibrated probability output. The interface can be found [here](https://pro-pann.streamlit.app/).
 
 Once all [Installation Steps](#installation) are completed, you can also run the app locally with `.venv/bin/streamlit run app/base_app.py`.
 
 ### Features
-- Select any of the 13 deployed outcomes from the sidebar. Wound complications is selected by default.
+- Select any of the 5 primary outcomes from the sidebar. Wound complications is selected by default.
 - Enter patient values into the appropriate fields. Laboratory values may be marked N/A, and the fitted preprocessing pipeline imputes them.
 - Results include:
   - **Risk stratification** into one of Very Low, Low, Moderate, or High risk
@@ -57,7 +57,7 @@ Once all [Installation Steps](#installation) are completed, you can also run the
   - **Calibrated risk** probability
   - **Percentile ranking** of model output relative to the 2024 cohort
   - **Feature contribution** via patient-level SHAP explanation values
-- 30-day mortality is modeled but not deployed.
+- Secondary outcomes are modeled but not deployed.
 
 ## Project Layout
 ### Included directories
@@ -66,7 +66,7 @@ Once all [Installation Steps](#installation) are completed, you can also run the
   - `display_functions.py`: helper file for the modules displayed on the interface
   - `utils.py`: helper functions for risk bins, observed rates, and percentiles
   - `shap_utils.py`: helper functions for SHAP analysis
-  - `models/calibrated/`: calibrated model for each deployed outcome
+  - `models/calibrated/`: calibrated model for each primary outcome
   - `preprocessors/pipeline.joblib`: fitted preprocessing pipeline
   - `shap_explainers/`: per-outcome SHAP explainers and the reduced feature list
   - `bin_thresholds/`: risk-bin cut points
@@ -145,8 +145,7 @@ brew install libomp
 ## Data Privacy
 This repository contains **no patient-level data**, as the ACS-NSQIP Participant Use File data use agreement requires:
 - **Test-cohort summaries:** per-patient predictions and labels are replaced by aggregate summaries in `app/population_summary/`. These hold the observed event rate per risk bin and percentile cut points, and they reproduce the displayed values exactly.
-- **Tree-based SHAP explainers:** these store no background data.
-- **Logistic regression explainer:** it uses a summarized background (mean and covariance) instead of training rows.
+- **SHAP explainers:** all deployed explainers are tree-based and store no background data.
 - **Safeguards:** `.gitignore` blocks `*.parquet`, `*.csv`, `*.xlsx`, and `app/all_preds/`. `smoke_test.py` asserts that none are present.
 
 ## License: MIT

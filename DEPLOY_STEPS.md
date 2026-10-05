@@ -85,7 +85,7 @@ The first build takes a few minutes:
 ## 4. Verify the live app
 
 1. Open https://pro-pann.streamlit.app.
-2. Tick all 13 outcomes, keep the default inputs, and click **Predict outcomes**.
+2. Tick all 5 outcomes, keep the default inputs, and click **Predict outcomes**.
 3. Each outcome should show:
    - a risk;
    - a category;
