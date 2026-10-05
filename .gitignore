@@ -1,0 +1,22 @@
+# Python / tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.streamlit/secrets.toml
+
+# ---- DATA-PRIVACY GUARD (ACS-NSQIP PUF DUA) --------------------------------
+# Never commit patient-level data: per-patient predictions, cohorts, processed
+# matrices, labels, or parity-probe dumps.
+app/all_preds/
+data/
+*.parquet
+*.csv
+*.xlsx
+*.xls
+*.sav
+*.dta
+*.feather
+parity_*.json

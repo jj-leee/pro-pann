@@ -1,0 +1,15 @@
+{
+  "Wound Complication (composite)": "wound",
+  "Superficial SSI": "supinfec",
+  "Deep Incisional SSI": "deep_ssi",
+  "Organ/Space SSI": "organ_ssi",
+  "Wound Dehiscence": "dehis",
+  "Unplanned Reoperation": "reop",
+  "Unplanned Readmission": "readmit",
+  "Venous Thromboembolism": "vte",
+  "Serious Complication": "serious",
+  "Any Complication": "any",
+  "Bleeding/Transfusion": "bleed",
+  "Sepsis/Septic Shock": "sepsis",
+  "Non-home Discharge": "nonhome"
+}
