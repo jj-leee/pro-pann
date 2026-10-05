@@ -1,11 +1,9 @@
 """Per-patient SHAP explanation for the app (adapted from ML-Tongue-Pred app/shap_utils)."""
 from __future__ import annotations
 
+import altair as alt
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import streamlit as st
 
 from src import shap_utils as core
@@ -50,24 +48,48 @@ def compute_shap(_explainer, reduced_row, key):
     return list(vals.feature_names), np.asarray(vals.values)[0]
 
 
-def shap_plot(feat_names, phi, top_n=10):
+def shap_frame(feat_names, phi, top_n=10):
+    """Top-N factors (plus the remainder) as % of total |contribution|."""
     order = np.argsort(np.abs(phi))[::-1]
     top = order[:top_n]
     rest = order[top_n:]
     names = [pretty(feat_names[i]) for i in top]
     vals = [phi[i] for i in top]
     if len(rest):
-        names.append(f"{len(rest)} other features")
+        names.append(f"{len(rest)} other factors")
         vals.append(float(np.sum([phi[i] for i in rest])))
     total = np.sum(np.abs(vals)) or 1.0
     pct = [100 * v / total for v in vals]
-    colors = ["#ff006e" if v > 0 else "#118ab2" for v in vals]
-    fig, ax = plt.subplots(figsize=(7, max(3, 0.45 * len(names))))
-    ypos = np.arange(len(names))[::-1]
-    ax.barh(ypos, pct, color=colors)
-    ax.set_yticks(ypos)
-    ax.set_yticklabels(names, fontsize=9)
-    ax.axvline(0, color="k", lw=0.8)
-    ax.set_xlabel("Contribution to risk (%)  —  pink ↑ risk, blue ↓ risk")
-    fig.tight_layout()
-    return fig
+    return pd.DataFrame({
+        "factor": names,
+        "pct": pct,
+        "effect": ["Raises risk" if v > 0 else "Lowers risk" for v in vals],
+        "label": [f"{p:+.0f}%" if round(p) != 0 else "0%" for p in pct],
+    })
+
+
+def shap_chart(feat_names, phi, top_n=10):
+    df = shap_frame(feat_names, phi, top_n)
+    lim = max(5.0, float(np.ceil(df["pct"].abs().max() * 1.3 / 5) * 5))  # room for labels
+    base = alt.Chart(df).encode(
+        y=alt.Y("factor:N", sort=None, title=None,
+                axis=alt.Axis(labelLimit=200, labelOverlap=False, labelFontSize=12,
+                              ticks=False, domain=False, labelPadding=8)),
+        x=alt.X("pct:Q", title="Share of total contribution (%)",
+                scale=alt.Scale(domain=[-lim, lim]),
+                axis=alt.Axis(grid=True, gridColor="#eef0f3", tickCount=5)),
+    )
+    bars = base.mark_bar(size=16).encode(
+        color=alt.Color("effect:N", legend=None,
+                        scale=alt.Scale(domain=["Raises risk", "Lowers risk"],
+                                        range=["#c21615", "#5b7fa6"])),
+        tooltip=[alt.Tooltip("factor:N", title="Factor"),
+                 alt.Tooltip("effect:N", title="Effect"),
+                 alt.Tooltip("pct:Q", title="Share (%)", format="+.1f")],
+    )
+    text_up = base.transform_filter("datum.pct > 0").mark_text(
+        align="left", dx=4, fontSize=11, color="#4b5563").encode(text="label:N")
+    text_down = base.transform_filter("datum.pct <= 0").mark_text(
+        align="right", dx=-4, fontSize=11, color="#4b5563").encode(text="label:N")
+    zero = alt.Chart(pd.DataFrame({"x": [0]})).mark_rule(color="#9ca3af").encode(x="x:Q")
+    return (bars + text_up + text_down + zero).properties(height=32 * len(df))

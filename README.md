@@ -49,14 +49,16 @@ This repository is a GitHub fork of [ML-Tongue-Pred](https://github.com/AnthonyM
 Once all [Installation Steps](#installation) are completed, you can also run the app locally with `.venv/bin/streamlit run app/base_app.py`.
 
 ### Features
-- Select any of the 5 primary outcomes from the sidebar. Wound complications is selected by default.
-- Enter patient values into the appropriate fields. Laboratory values may be marked N/A, and the fitted preprocessing pipeline imputes them.
-- Results include:
-  - **Risk stratification** into one of Very Low, Low, Moderate, or High risk
-  - **Observed event rate** among 2024 test-cohort patients in the same risk bin
+- Enter the patient in four sections: Patient, Health status, Preoperative labs, and Operation (including concurrent procedures). BMI is calculated from height and weight.
+- Laboratory values may be marked not available, and the fitted preprocessing pipeline imputes them.
+- Choose which of the 5 primary outcomes to estimate (all are selected by default), then select **Estimate risk**.
+- Results show a summary card per outcome and a detailed tab for each:
   - **Calibrated risk** probability
+  - **Risk stratification** into one of Very Low, Low, Moderate, or High risk, shown on a tier scale with cut points
+  - **Observed event rate** among 2024 test-cohort patients in each risk tier
   - **Percentile ranking** of model output relative to the 2024 cohort
-  - **Feature contribution** via patient-level SHAP explanation values
+  - **Contributing factors** via patient-level SHAP explanation values
+- The sidebar summarizes the models and defines each outcome.
 - Secondary outcomes are modeled but not deployed.
 
 ## Project Layout

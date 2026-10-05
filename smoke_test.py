@@ -103,9 +103,8 @@ def main():
         else:
             margin = float(base_model.predict(Xr, raw_score=True)[0])
         additive = abs(base + float(np.sum(phi)) - margin) < 1e-4
-        fig = appshap.shap_plot(names, phi, 10)
-        import matplotlib.pyplot as plt
-        plt.close(fig)
+        chart_spec = appshap.shap_chart(names, phi, 10).to_dict()
+        additive &= bool(chart_spec.get("layer"))
 
         good = (0 <= prob <= 1 and np.isfinite(phi).all() and additive
                 and 0 <= pct <= 100 and n_pop == 2829 and len(rates) == 4)
