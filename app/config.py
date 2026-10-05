@@ -14,7 +14,8 @@ if str(BASE_PATH) not in sys.path:
 def _load_json(name, default):
     p = APP_DIR / name
     if p.exists():
-        return json.load(open(p))
+        with open(p) as f:
+            return json.load(f)
     return default
 
 
