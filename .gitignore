@@ -20,3 +20,4 @@ data/
 *.dta
 *.feather
 parity_*.json
+failure.png
